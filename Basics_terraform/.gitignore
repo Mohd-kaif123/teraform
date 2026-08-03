@@ -1,0 +1,26 @@
+# Terraform state files - inme sensitive data hota hai (IP, secrets, resource IDs)
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Terraform working directory - provider binaries, cache (bahut heavy, regenerate ho sakta hai)
+.terraform/
+.terraform.lock.hcl
+
+# Variable files jisme secrets ho sakte hain (agar tumne .tfvars mein password/keys dale hain)
+*.tfvars
+*.tfvars.json
+
+# Private keys - YE SABSE IMPORTANT HAI
+terra-key-ec2
+terra-key-ec2.pub
+*.pem
+*.key
+
+# Crash logs
+crash.log
+crash.*.log
+
+# OS/editor junk files
+.DS_Store
+*.swp
