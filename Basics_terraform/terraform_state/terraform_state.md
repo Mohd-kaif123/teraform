@@ -53,6 +53,45 @@ terraform import aws_instance.web i-0abcd1234efgh5678
 
 - Existing AWS resource (jo already console se manually banaya gaya tha) ko Terraform state me laata hai, taaki ab Terraform usse manage kar sake.
 
+## Ab dekhenge ki keypair kaise import karenge:-
+>Step 1: AWS me Key Pair check karo
+Example:
+Key Pair Name: my-key
+
+> Step 2: Terraform resource banao
+resource "aws_key_pair" "mykey" {
+  key_name = "my-key"
+}
+- Import ke liye public_key dena zaroori nahi hota.
+
+> Step 3: Terraform initialize karo
+terraform init
+
+> Step 4: Import command chalao
+terraform import aws_key_pair.mykey my-key
+
+Yahan:
+- aws_key_pair.mykey → Terraform resource address
+- my-key → AWS ka existing Key Pair name
+
+> Step 5: Verify
+terraform state list
+Output:
+aws_key_pair.mykey
+
+> Step 6: State dekho
+terraform state show aws_key_pair.mykey
+
+Output kuch is tarah hoga:
+
+resource "aws_key_pair" "mykey" {
+  id         = "my-key"
+  key_name   = "my-key"
+  key_pair_id = "key-0a123456789"
+  fingerprint = "12:34:56:78:..."
+}
+
+
 ## Step-by-step import example:
 
 >#Step 1: Pehle .tf file me empty resource block likho
