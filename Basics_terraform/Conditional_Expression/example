@@ -1,0 +1,34 @@
+resource "aws_instance" "my_instance" {
+    key_name = "aws_key_pair.my_key.key_name"
+    security_groups = aws_security_group.my_security_group.name
+    instance_type = "t2.micro"
+    ami = "ami-0cb........."
+
+    root_block_device {  # --> jo ham ec2 launch karte time last storage dekhte hai na usko bhi apne hisab se storage le sakte hai
+        volume_size = var.env == "prd" ? 20 : 10
+        volume_type = "gp3" # (gernal purpose --> gp )
+    }
+
+    tags = {
+        Name = "kaif-automate" 
+    }
+}
+
+var.env == "prd"  # yeha compare ho raha hai ki env jo hai wo production hai ki nahi check kar raha hai.
+--> agar var.env me value prd hai ya dev usper depend karta hai
+
+? ==> iska matlab hai agr nahi hai tu
+ 
+ 20 : 10 -- ye colon ke baad ki value tab aaegi jab condition galat rahegi
+  |
+agar env== "prd" hai matlab condition sahi hai 
+tab ye aaega colon ke pahale wali value.
+
+
+
+root_block_device {  # --> jo ham ec2 launch karte time last storage dekhte hai na usko bhi apne hisab se storage le sakte hai
+        volume_size = var.env == "prd" ? 20 : var.ec2_default_root_storage_size
+        volume_type = "gp3" # (gernal purpose --> gp )
+    }
+
+--> ye variable "var.ec2_default_root_storage_size" ke andar jo value hai wo aaegi
