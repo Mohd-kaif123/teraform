@@ -1,3 +1,5 @@
+# ye lock Id generate karne ka code hai
+
 resource "aws_dynamodb_table" "basic-aws_dynamodb_table" {
   name         = "tws-state-table"
   billing_mode = "PAY_PER_REQUEST"
