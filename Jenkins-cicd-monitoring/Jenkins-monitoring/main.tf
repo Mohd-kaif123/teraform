@@ -17,7 +17,7 @@ data "aws_vpc" "default" {
 # ============================================================
 
 resource "aws_s3_bucket" "jenkins_logs" {
-   bucket_prefix = "jenkins-monitoring-"
+   bucket_prefix = "jenkins-monitoring-"   # Actual me bucket ka naam yehi hai
 
   tags = {
     Name        = "Jenkins Monitoring Logs"
@@ -284,9 +284,16 @@ systemctl status jenkins --no-pager
                 EOT
               # Start CloudWatch Agent
               sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
+              
+# Yeha per ab ham ek dummy log file bana rahe hai.              
               # Create TEST Jenkins LOG
                 sudo touch /var/log/jenkins/jenkins.log
                 sudo chmod 644 /var/log/jenkins/jenkins.log
+
+# Ek helper script /usr/local/bin/create-jenkins-error.sh create ki gayi 
+# jo manually run karke ek fake ERROR line log mein daal sakte ho — 
+# taaki tum CloudWatch alarm ko trigger karke test kar sako
+
               # Create a test log entry
                 cat > /usr/local/bin/create-jenkins-error.sh <<'SCRIPT'
 
