@@ -49,3 +49,30 @@ Email subscriber (tera email) ko alert mil jata hai
 - SNS Topic = ek "broadcast channel" — jisko bhi is channel pe kuch bhejo, saare subscribers ko notification milegi
 
 - Subscription = var.email (tera email mansoorikaif365@gmail.com) is topic ko subscribe kar raha hai email protocol se
+
+# ============================================================
+# CLOUDWATCH ALARM
+# ============================================================
+
+> namespace + metric_name 
+→ same jo Metric Filter mein define kiya tha (yaha match hona zaruri hai, warna alarm kabhi trigger nahi hoga)
+
+> comparison_operator = "GreaterThanThreshold" + threshold = 5 
+→ matlab "jab value 5 se zyada ho jaye"
+
+> period = 60, evaluation_periods = 1 
+→ har 60-second window mein 1 baar check karo
+
+> statistic = "Sum" 
+→ us 60-sec window ke andar saare error counts add karo
+
+> alarm_actions 
+→ alarm trigger hone pe kya karna hai (SNS ko notify)
+
+> ok_actions 
+→ jab alarm wapas normal ho jaye (OK state), tab bhi notify karo (recovery notification)
+> treat_missing_data = "notBreaching" 
+→ agar koi data hi nahi aaya (metric missing), to usko "problem nahi hai" treat karo — false alarms se bachne ke liye
+
+> depends_on 
+→ explicitly bata raha hai ki Alarm banane se pehle Metric Filter zarur ban chuka ho (implicit dependency already hai reference se, ye extra safety hai)
