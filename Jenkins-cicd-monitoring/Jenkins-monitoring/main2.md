@@ -101,3 +101,5 @@ command: Agent ko config file ke saath start/fetch karta hai
 # Interview Q: CloudWatch Agent install karne ke liye IAM role kyu chahiye?
 - → Agent ko AWS APIs call karni padti hain (metrics/logs push karne ke liye), aur EC2 pe koi hardcoded credentials nahi hote — isliye instance profile (jo humne section 9 mein banaya) use karta hai.
 
+
+
