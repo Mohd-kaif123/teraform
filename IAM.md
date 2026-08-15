@@ -25,3 +25,33 @@ assume_role_policy = jsonencode({
 
 > Bas itni si baat hai. Poori trust policy sirf ye keh rahi hai:
 "Is role ko sirf EC2 service assume kar sakti hai, aur usse allow karo."
+
+
+# Method 1: AWS Managed Policy Attach Karna (Recommended 🌟)
+#1. Aapka IAM Role
+resource "aws_iam_role" "my_iam_role" {
+  name = "iam_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+#2. Pehli Policy Attach Karein (e.g., S3 Read Only Access)
+resource "aws_iam_role_policy_attachment" "s3_read_only" {
+  role       = aws_iam_role.my_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+}
+
+#3. Dusri Policy Attach Karein (e.g., DynamoDB Read Only Access)
+resource "aws_iam_role_policy_attachment" "dynamodb_read_only" {
+  role       = aws_iam_role.my_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+}
