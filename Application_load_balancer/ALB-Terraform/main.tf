@@ -16,9 +16,9 @@ module "elb"{
   log_bucket = module.iam_cloudwatch.log_bucket
 }
 
-# module "iam_cloudwatch" {
-#   source = "./iam-cloudwatch"
-#   bucket_name="my-log-bucket-example"
-# }
+module "iam_cloudwatch" {
+  source = "./iam-cloudwatch"
+  bucket_name="my-log-bucket-example"
+}
 
 ## For this Your IAM User Must Have Permission
