@@ -65,5 +65,61 @@ resource "aws_iam_instance_profile" "ec2" {
 }
 
 resource "aws_security_group" "ec2" {
-  
+  name = "${var.project_name}-sg"
+  description = "Security group for CloudWatch log monitoring EC2"
+  vpc_id = data.aws_vpc.default.id
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.ssh_cidr]
+  }
+
+  egress {
+    description = "Allow outbound access for package installation and CloudWatch"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.project_name}-sg"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "myapp" {
+  name = "/demo/ec2/myapp"
+  retention_in_days = var.log_retention_days
+
+  tags = {
+    Project = var.project_name
+  }
+}
+
+resource "aws_instance" "log_monitor" {
+  ami = data.aws_ami.amazon_linux.id
+  instance_type = var.instance_type
+  subnet_id = data.aws_subnet.default.ids[0]
+  vpc_security_group_ids = [ aws_security_group.ec2.id ]
+  iam_instance_profile = aws_iam_instance_profile.ec2.name
+  associate_public_ip_address = true
+
+  user_data = templatefile("${path.module}/user_data.sh.tftpl", {
+    log_group_name = aws_cloudwatch_log_group.myapp.name
+  })
+
+  user_data_replace_on_change = true
+
+  tags = {
+    Name = "${var.project_name}-EC2"
+    Project = var.project_name
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cloudWatch_agent,
+    aws_cloudwatch_log_group.myapp
+   ]
+
 }
