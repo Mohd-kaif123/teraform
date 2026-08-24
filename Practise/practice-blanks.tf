@@ -1,34 +1,3 @@
-#===========================================
-# Create a VPC and 2 subnets
-#===========================================
-resource "aws_vpc" "my_vpc" {
-    cidr_block = "10.0.0.0/16"
-
-    tags = {
-        Name = "devops-vpc"
-    }
-}
-
-resource "aws_subnet" "my_subnet" {
-    vpc_id = aws_vpc.my_vpc.id
-    cidr_block = "10.0.0.0/20"
-    availability_zone = "us-east-1a"
-
-    tags = {
-      Name = "subnet-1"
-    }
-}
-
-resource "aws_subnet" "subnet" {
-  vpc_id = aws_vpc.my_vpc.id
-  cidr_block = "10.0.16.0/20"
-  availability_zone = "us-east-1b"
-
-  tags = {
-    Name = "subnet-2"
-  }
-}
-
 ########################################
 # 3. INTERNET GATEWAY
 # Hint: sirf vpc_id chahiye, aur kuch nahi
