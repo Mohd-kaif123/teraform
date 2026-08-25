@@ -1,32 +1,48 @@
+#==========================================
+# Aws provider
+#==========================================
+
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "~>6.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
 #===========================================
 # Create a VPC and 2 subnets
 #===========================================
+
 resource "aws_vpc" "my_vpc" {
-    cidr_block = "10.0.0.0/16"
-
-    tags = {
-        Name = "devops-vpc"
-    }
-}
-
-resource "aws_subnet" "my_subnet" {
-    vpc_id = aws_vpc.my_vpc.id
-    cidr_block = "10.0.0.0/20"
-    availability_zone = "us-east-1a"
-
-    tags = {
-      Name = "subnet-1"
-    }
-}
-
-resource "aws_subnet" "subnet" {
-  vpc_id = aws_vpc.my_vpc.id
-  cidr_block = "10.0.16.0/20"
-  availability_zone = "us-east-1b"
+  cidr_block = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  enable_dns_support = true 
 
   tags = {
-    Name = "subnet-2"
+    Name = "devops-vpc"
   }
+}
+
+resource "aws_subnet" "my_subnet-1" {
+  vpc_id = aws_vpc.my_vpc.id
+  cidr_block = "10.0.0.0/20"
+  availability_zone = "us-east-1a"
+  map_public_ip_on_launch = true 
+
+  tags = {
+    Name = "subnet-1"
+  }
+}
+
+resource "aws_subnet" "my_subnet-2" {
+  vpc_id = aws_vpc.my_vpc.id
+  cidr_block = "10.0.16.0/20"
 }
 
 ########################################
