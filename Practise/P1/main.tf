@@ -226,42 +226,42 @@ resource "aws_lb_target_group" "my_tg" {
 }
 
 # EC2-1 ko target group me register karna
-resource "aws_lb_target_group_attachment" "___________" {
-  target_group_arn = ___________________
-  target_id        = ___________________
-  port             = ___________
+resource "aws_lb_target_group_attachment" "ec2-rg1" {
+  target_group_arn = aws_lb_target_group.my_tg.arn
+  target_id        = aws_instance.my_web1
+  port             = 80
 }
 
 # EC2-2 ko target group me register karna
-resource "aws_lb_target_group_attachment" "___________" {
-  target_group_arn = ___________________
-  target_id        = ___________________
-  port             = ___________
+resource "aws_lb_target_group_attachment" "ec2-sg2" {
+  target_group_arn = aws_lb_target_group.my_tg.arn
+  target_id        = aws_instance.my_web2
+  port             = 80
 }
 
 ########################################
 # 9. APPLICATION LOAD BALANCER
 # Hint: subnets list me dono subnet ka reference, security_groups list me alb-sg
 ########################################
-resource "aws_lb" "___________" {
+resource "aws_lb" "my_alb" {
   name               = "devops-alb"
-  internal           = ___________
-  load_balancer_type = "___________"
-  security_groups    = [___________________]
-  subnets            = [___________________, ___________________]
+  internal           = true
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb-sg]
+  subnets            = [aws_subnet.my_subnet-1, aws_subnet.my_subnet-2]
 }
 
 ########################################
 # 9b. LISTENER — ALB ko batata hai kaha forward karna hai
 # Hint: default_action ke andar type aur target_group_arn
 ########################################
-resource "aws_lb_listener" "___________" {
-  load_balancer_arn = ___________________
-  port              = ___________
-  protocol          = "___________"
+resource "aws_lb_listener" "my_listner" {
+  load_balancer_arn = aws_lb.my_alb.arn
+  port              = 80
+  protocol          = "HTTP"
 
   default_action {
-    type             = "___________"
-    target_group_arn = ___________________
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.my_tg.arn
   }
 }
