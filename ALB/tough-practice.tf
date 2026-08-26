@@ -18,13 +18,13 @@ variable "azs" {
 #         "subnet-${count.index + 1}" likhna hoga (+1 isliye kyunki index 0 se start hota hai)
 ########################################
 resource "aws_subnet" "subnet" {
-  count             = ___________
+  count             = 2
   vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = ___________________
-  availability_zone = ___________________
+  cidr_block        = var.subnet_cidrs[count.index]
+  availability_zone = var.azs[count.index]
 
   tags = {
-    Name = ___________________
+    Name = "subnet-${count.index + 1 }"
   }
 }
 
@@ -34,7 +34,7 @@ resource "aws_subnet" "subnet" {
 #       (kyunki ab subnet khud count-based hai, isliye [] index chahiye)
 ########################################
 resource "aws_route_table_association" "rta" {
-  count          = ___________
-  subnet_id      = ___________________
+  count          = 2
+  subnet_id      = aws_subnet.subnet[count.index]
   route_table_id = aws_route_table.public_rt.id
 }
