@@ -1,4 +1,5 @@
 
+/*
 resource "aws_iam_role" "my_iam_role" {
   name = "iam_role"
 
@@ -23,3 +24,4 @@ resource "aws_iam_user_policy_attachment" "attach_ec2" {
   user = "kaif_dev"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
+*/
