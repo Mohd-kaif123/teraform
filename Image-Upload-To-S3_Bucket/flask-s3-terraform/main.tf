@@ -49,6 +49,7 @@ resource "aws_instance" "my_ec2" {
   instance_type = "t2.micro"
   ami = "ami-004f790b835b26145"
   subnet_id = "subnet-027f44b03c5dc995a"
+  associate_public_ip_address = true
   user_data = <<-EOF
   #!/bin/bash
   sudo apt update -y
