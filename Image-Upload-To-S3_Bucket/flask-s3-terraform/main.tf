@@ -31,6 +31,13 @@ resource "aws_security_group" "aws_sg" {
     protocol = "tcp"
     cidr_blocks = [ "0.0.0.0/0" ]
   }
+
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = [ "0.0.0.0/0" ]
+  }
   ingress {
     from_port = 5000
     to_port = 5000
@@ -50,6 +57,7 @@ resource "aws_instance" "my_ec2" {
   ami = "ami-004f790b835b26145"
   subnet_id = "subnet-027f44b03c5dc995a"
   associate_public_ip_address = true
+  key_name = "secure_key"
   user_data = <<-EOF
   #!/bin/bash
   sudo apt update -y

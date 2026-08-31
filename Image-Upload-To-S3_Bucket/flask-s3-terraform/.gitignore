@@ -4,3 +4,4 @@
 crash.log
 terraform.tfvars
 .terraform.lock.hcl
+secure_key*
